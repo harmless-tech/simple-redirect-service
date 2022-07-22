@@ -21,7 +21,7 @@ app.get("/", (c) => c.json({
     version: "0.0.1",
     desc: "A simple redirect service with a stat counter. Built using Bun and Hono.",
     author: "harmless-tech",
-    license: `${c.req.url}license`,
+    license: "/license",
     git: "https://github.com/harmless-tech/simple-redirect-service",
     issues: "https://github.com/harmless-tech/simple-redirect-service/issues"
 }));
