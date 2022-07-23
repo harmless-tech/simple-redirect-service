@@ -4,6 +4,7 @@ import { logger } from "hono/logger";
 import redirect from "./redirect/redirect";
 import stats from "./redirect/stats";
 import { RedirectStore } from "./database";
+import utils from "./utils";
 
 const app = new Hono({ router: new RegExpRouter() });
 const port = process.env.PORT || 3000;
@@ -18,7 +19,7 @@ app.use('*', logger());
 app.get("/", (c) => c.json({
     name: "Simple Redirect Service",
     id: "simple-redirect-service",
-    version: "0.0.1",
+    version: "0.0.3",
     desc: "A simple redirect service with a stat counter. Built using Bun and Hono.",
     author: "harmless-tech",
     license: "/license",
@@ -26,10 +27,10 @@ app.get("/", (c) => c.json({
     issues: "https://github.com/harmless-tech/simple-redirect-service/issues"
 }));
 app.get("/license", (c) => c.text(LICENSE_FILE));
-app.notFound((c) => c.text("Not Found", 404));
+app.notFound((c) => c.text("Not Found", utils.STATUS_NOT_FOUND));
 app.onError((err, c) => {
     console.error(err);
-    return c.text("Internal Server Error", 500);
+    return c.text("Internal Server Error", utils.STATUS_INTERNAL_SERVER_ERROR);
 });
 
 // Routes
