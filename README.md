@@ -12,6 +12,8 @@ Add your redirects into a redirects.json file in the root directory with the for
 }
 ```
 
+*SRS currently requires [bun](https://bun.sh/) 0.1.7 or greater.*
+
 ### Running
 ```shell
 bun run start
