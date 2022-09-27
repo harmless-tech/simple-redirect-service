@@ -1,12 +1,11 @@
 import { Hono } from "hono";
-import { RegExpRouter } from "hono/router/reg-exp-router";
 import { logger } from "hono/logger";
 import redirect from "./redirect/redirect";
 import stats from "./redirect/stats";
 import { RedirectStore } from "./database";
 import utils from "./utils";
 
-const app = new Hono({ router: new RegExpRouter() });
+const app = new Hono();
 const port = process.env.PORT || 3000;
 
 const LICENSE_FILE = await Bun.file("LICENSE").text();
@@ -19,7 +18,7 @@ app.use('*', logger());
 app.get("/", (c) => c.json({
     name: "Simple Redirect Service",
     id: "simple-redirect-service",
-    version: "0.0.4",
+    version: "0.0.5",
     desc: "A simple redirect service with a stat counter. Built using Bun and Hono.",
     author: "harmless-tech",
     license: "/license",
