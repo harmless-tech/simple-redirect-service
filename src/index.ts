@@ -18,7 +18,7 @@ app.use('*', logger());
 app.get("/", (c) => c.json({
     name: "Simple Redirect Service",
     id: "simple-redirect-service",
-    version: "0.0.5",
+    version: "0.0.6",
     desc: "A simple redirect service with a stat counter. Built using Bun and Hono.",
     author: "harmless-tech",
     license: "/license",
