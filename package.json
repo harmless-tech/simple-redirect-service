@@ -1,15 +1,15 @@
 {
-  "version": "0.0.6",
+  "version": "0.0.7",
   "name": "simple-redirect-service",
   "main": "src/index.js",
   "scripts": {
     "start": "bun run src/index.ts"
   },
   "dependencies": {
-    "hono": "^2.4.1",
+    "hono": "^2.7.2",
     "lru-cache": "^7.14.1"
   },
   "devDependencies": {
-    "bun-types": "^0.2.2"
+    "bun-types": "^0.4.0"
   }
 }
