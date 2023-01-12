@@ -1,9 +1,7 @@
-/.fleet
-/.idea
-node_modules/
-
-*.bun
-*.sqlite
-redirects.json
+/docs/
+/lib/
+/bin/
+/.shards/
+*.dwarf
 
 .DS_Store

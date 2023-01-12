@@ -1,0 +1,8 @@
+{
+  "redirects": {
+    "harmless": "https://harmless.tech",
+    "crow": "https://crow.rest",
+    "drone": "https://drone.crow.rest",
+    "test": "https://duckduckgo.com/?q=crystal"
+  }
+}

@@ -1,0 +1,13 @@
+name: simple-redirect-service
+version: 0.1.0
+
+authors:
+  - harmless-tech <28830529+harmless-tech@users.noreply.github.com>
+
+targets:
+  simple-redirect-service:
+    main: src/simple-redirect-service.cr
+
+crystal: 1.7.0
+
+license: MIT

@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Dev Environment (please complete the following information):**
  - OS: [e.g. Windows]
  - Browser: [e.g. chrome, safari]
- - Bun Version: [e.g. 0.1.4]
+ - Crystal Version: [e.g. 1.7.0]
  - Editor:
 
 **Additional context**
