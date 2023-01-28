@@ -12,11 +12,18 @@ Add your redirects into a redirects.json file in the root directory with the for
 }
 ```
 
+### Using the docker container
+TODO
+
 ### Running
 ```shell
-TODO
+shards run (--release)
 ```
 Will run at http://localhost:3000 by default.
 
-### Stats
-To get stats just add /stats to the end of any redirect url.
+### Building
+```shell
+shards build (--release)
+```
+
+Binary will be put in the bin folder as simple-redirect-service

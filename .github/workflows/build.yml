@@ -1,0 +1,36 @@
+name: Try Build App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache crystal
+        uses: actions/cache@v3
+        with:
+          path: |
+            bin
+            lib
+          key: ${{ runner.os }}-crystal-build-${{ hashFiles('**/shard.lock') }}
+      - name: Install pkgs
+        run: sudo apt update && sudo apt-get install -y libbsd-dev libedit-dev libevent-dev 
+          libgmp-dev libgmpxx4ldbl libpcre3-dev libssl-dev libtool libxml2-dev libyaml-dev libz-dev
+      - name: Install crystal
+        run: curl -fsSL https://crystal-lang.org/install.sh | sudo bash
+      - name: Build
+        run: |
+          shards install
+          shards build
+      - name: Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: srs
+          path: |
+            bin/simple-redirect-service

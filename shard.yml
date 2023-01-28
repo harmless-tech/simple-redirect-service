@@ -8,6 +8,10 @@ targets:
   simple-redirect-service:
     main: src/simple-redirect-service.cr
 
-crystal: 1.7.0
+crystal: ">= 1.7.0"
 
 license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal

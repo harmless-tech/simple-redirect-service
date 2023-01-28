@@ -4,4 +4,6 @@
 /.shards/
 *.dwarf
 
+redirects.json
+
 .DS_Store
