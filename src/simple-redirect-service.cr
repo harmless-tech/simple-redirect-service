@@ -49,6 +49,7 @@ get "/:id" do |env|
   env.response.redirect(redirect.as String, HTTP::Status::FOUND)
 end
 
+# Error routes
 error 404 do
   "404 - No Redirect"
 end

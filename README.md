@@ -14,6 +14,9 @@ Add your redirects into a redirects.json file in the root directory with the for
 
 ### Using the docker container
 TODO
+```shell
+docker run -p 3000:3000 --name "srs" --mount type=bind,source="$(pwd)/redirects.json",target=/app/redirects.json TODO
+```
 
 ### Running
 ```shell
