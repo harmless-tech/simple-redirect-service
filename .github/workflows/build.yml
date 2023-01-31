@@ -59,7 +59,8 @@ jobs:
           echo '{"redirects": {"duck": "https://duckduckgo.com"}}' > redirects.json
       - name: Test
         run: |
-          docker run --platform=linux/amd64 -p 3000:3000 --name srs --mount type=bind,source="$(pwd)/redirects.json",target=/app/redirects.json --pull=never srs-dev
+          docker run --platform=linux/amd64 -d --rm -p 3000:3000 --name srs --mount type=bind,source="$(pwd)/redirects.json",target=/app/redirects.json --pull=never srs-dev
           sleep 15
+          docker logs srs
           curl localhost:3000
           docker stop srs
