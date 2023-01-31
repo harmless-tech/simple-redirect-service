@@ -49,18 +49,17 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          pull: true
           load: true
           tags: srs-dev
           platforms: linux/amd64
           builder: ${{ steps.buildx.outputs.name }}
-          cache-from: type=local,src=docker-cache
-          cache-to: type=local,dest=docker-cache
       - name: Create json
         run: |
           echo '{"redirects": {"duck": "https://duckduckgo.com"}}' > redirects.json
       - name: Test
         run: |
           docker run --platform=linux/amd64 -p 3000:3000 --name srs --mount type=bind,source="$(pwd)/redirects.json",target=/app/redirects.json --pull=never srs-dev
-          sleep 30
+          sleep 15
           curl localhost:3000
           docker stop srs

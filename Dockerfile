@@ -1,4 +1,4 @@
-FROM ghcr.io/crow-rest/crystal:edge-alpine as builder
+FROM ghcr.io/crow-rest/crystal:alpine as builder
 
 WORKDIR /app
 COPY . .
