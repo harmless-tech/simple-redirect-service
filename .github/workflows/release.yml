@@ -34,13 +34,13 @@ jobs:
           platforms: linux/amd64,linux/arm64
           builder: ${{ steps.buildx.outputs.name }}
       - name: Extract binary arm64
-        run: docker run --rm --platform=linux/arm64 --mount type=bind,source=$(pwd),target=/pkg-repo --pull=always ghcr.io/harmless-tech/simple-redirect-service:${{ github.ref_name }} sh -c "cp /app/simple-redirect-service /pkg-repo"
+        run: docker run --rm --platform=linux/arm64 --mount type=bind,source=$(pwd),target=/pkg-repo --pull=always --entrypoint /bin/sh ghcr.io/harmless-tech/simple-redirect-service:${{ github.ref_name }} -c "cp /app/simple-redirect-service /pkg-repo"
       - name: Tar aarch64
         run: tar -czvf aarch64-unknown-linux-musl.tar.gz simple-redirect-service
       - name: Hash aarch64
         run: sha256sum aarch64-unknown-linux-musl.tar.gz >> aarch64-unknown-linux-musl.sha256
       - name: Extract binary amd64
-        run: docker run --rm --platform=linux/amd64 --mount type=bind,source=$(pwd),target=/pkg-repo --pull=always ghcr.io/harmless-tech/simple-redirect-service:${{ github.ref_name }} sh -c "cp /app/simple-redirect-service /pkg-repo"
+        run: docker run --rm --platform=linux/amd64 --mount type=bind,source=$(pwd),target=/pkg-repo --pull=always --entrypoint /bin/sh ghcr.io/harmless-tech/simple-redirect-service:${{ github.ref_name }} -c "cp /app/simple-redirect-service /pkg-repo"
       - name: Tar x86_64
         run: tar -czvf x86_64-unknown-linux-musl.tar.gz simple-redirect-service
       - name: Hash x86_64
