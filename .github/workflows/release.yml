@@ -24,7 +24,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -55,7 +55,7 @@ jobs:
             x86_64-unknown-linux-musl.tar.gz
             x86_64-unknown-linux-musl.sha256
       - name: Release Artifact
-        uses: svenstaro/upload-release-action@2.4.0
+        uses: svenstaro/upload-release-action@2.7.0
         with:
           tag: ${{ github.ref_name }}
           release_name: simple-redirect-service-${{ github.ref_name }}
