@@ -17,8 +17,8 @@ get "/" do |env|
   {
     "name": "Simple Redirect Service",
     "id": "simple-redirect-service",
-    "version": "0.1.0",
-    "desc": "A simple redirect service, built using crystal lang.",
+    "version": "0.1.1",
+    "desc": "A simple redirect service, built using crystal lang with kemalcr.",
     "author": "harmless-tech",
     "license": "/license",
     "git": "https://github.com/harmless-tech/simple-redirect-service",
@@ -46,7 +46,12 @@ get "/:id" do |env|
     next "id not found"
   end
 
-  env.response.redirect(redirect.as String, HTTP::Status::FOUND)
+  redirect = redirect.as String
+
+  env.response.content_type = "text/html; charset=utf-8"
+  "Redirecting to <a href=\"#{redirect}\" rel=\"noopener noreferrer\">#{redirect}</a>..."
+
+  env.response.redirect(redirect, HTTP::Status::FOUND)
 end
 
 # Error routes

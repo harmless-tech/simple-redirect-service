@@ -1,4 +1,7 @@
-FROM ghcr.io/crow-rest/crystal:alpine as builder
+FROM alpine:edge as builder
+
+RUN apk add --no-cache crystal shards openssl-dev
+RUN crystal --version
 
 WORKDIR /app
 COPY . .
@@ -6,11 +9,11 @@ COPY . .
 RUN shards install --production
 RUN shards build --production --release --verbose
 
-FROM alpine:latest
+FROM alpine:edge
 
 RUN apk add --no-cache \
     libevent-dev \
-    pcre-dev \
+    pcre2-dev \
     gc-dev
 
 WORKDIR /app
