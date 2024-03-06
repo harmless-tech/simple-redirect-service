@@ -1,20 +1,21 @@
-FROM alpine:edge as builder
+FROM crystallang/crystal:latest-alpine as builder
 
-RUN apk add --no-cache crystal shards openssl-dev
 RUN crystal --version
 
 WORKDIR /app
-COPY . .
+
+COPY spec/ ./spec
+COPY shard.yml .
+COPY shard.lock .
 
 RUN shards install --production
-RUN shards build --production --release --verbose
 
-FROM alpine:edge
+COPY src/ ./src
+COPY LICENSE .
 
-RUN apk add --no-cache \
-    libevent-dev \
-    pcre2-dev \
-    gc-dev
+RUN shards build --production --release --static --verbose
+
+FROM scratch
 
 WORKDIR /app
 
