@@ -17,9 +17,9 @@ get "/" do |env|
   {
     "name": "Simple Redirect Service",
     "id": "simple-redirect-service",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "desc": "A simple redirect service, built using crystal lang with kemalcr.",
-    "author": "harmless-tech",
+    "authors": ["harmless-tech"],
     "license": "/license",
     "git": "https://github.com/harmless-tech/simple-redirect-service",
     "issues": "https://github.com/harmless-tech/simple-redirect-service/issues"
@@ -37,13 +37,13 @@ get "/:id" do |env|
 
   if id.size > 26
     env.response.status = HTTP::Status::URI_TOO_LONG
-    next "id too long"
+    next "too long"
   end
 
   redirect = redirect_list[id]?
   if redirect == nil
     env.response.status = HTTP::Status::NOT_FOUND
-    next "id not found"
+    next "not found"
   end
 
   redirect = redirect.as String
@@ -55,6 +55,10 @@ get "/:id" do |env|
 end
 
 # Error routes
+error 414 do
+  "414 - Redirect ID Too Long"
+end
+
 error 404 do
   "404 - No Redirect"
 end
