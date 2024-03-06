@@ -14,6 +14,7 @@ COPY src/ ./src
 COPY LICENSE .
 
 RUN shards build --production --release --static --verbose
+RUN strip --strip-all ./bin/simple-redirect-service
 
 FROM scratch
 
