@@ -20,24 +20,29 @@ RUN --mount=type=cache,target=/prebuilt,sharing=locked <<EOT
     cargo prebuilt --path=/prebuilt/bin cargo-auditable
 EOT
 
+COPY LICENSE .
 COPY Cargo.toml .
 COPY Cargo.lock .
 COPY src src
 
 RUN --mount=type=cache,target=/app-build/target,sharing=locked --mount=type=cache,id=cargo,target=$CARGO_HOME/registry --mount=type=cache,target=/prebuilt,sharing=locked <<EOT
     set -e
-    export CFLAGS=-mno-outline-atomics
     export ARCH="$(uname -m)"
+    if [ $ARCH == 'aarch64' ]; then export CFLAGS=-mno-outline-atomics; fi
     if [ $BUILD_PROFILE == 'dev' ]; then BUILD_DIR=debug; else BUILD_DIR=$BUILD_PROFILE; fi
     export PATH=$PATH:/prebuilt/bin
     cargo auditable build --profile="$BUILD_PROFILE" --target=$ARCH-unknown-linux-musl
+
     mv target/$ARCH-unknown-linux-musl/$BUILD_DIR/simple-redirect-service /app-bin/
+    mv LICENSE /app-bin/
 EOT
 
 FROM scratch
 
-COPY --from=builder /app-bin/simple-redirect-service /app/
-COPY LICENSE /app/
+WORKDIR /app
+
+COPY --from=builder /app-bin/simple-redirect-service .
+COPY --from=builder /app-bin/LICENSE .
 
 EXPOSE 3000
 ENTRYPOINT ["/app/simple-redirect-service"]
