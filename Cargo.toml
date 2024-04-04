@@ -1,6 +1,6 @@
 [package]
 name = "simple-redirect-service"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["harmless-tech"]
 description = "Redirect"
@@ -23,10 +23,19 @@ include = [
 anyhow = "1.0.81"
 axum = "0.7.5"
 indexmap = { version = "2.2.6", features = ["serde"] }
-mimalloc = "0.1.39"
+mimalloc = { version = "0.1.39", optional = true}
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = { version = "1.0.115", features = ["indexmap"] }
 tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread", "signal"] }
+tower = "0.4.13"
+tower-http = { version = "0.5.2", features = ["normalize-path", "trace"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+url = { version = "2.5.0", features = [] }
+
+[features]
+default = ["mimalloc"]
+mimalloc = ["dep:mimalloc"]
 
 [profile.release]
 opt-level = 3
@@ -35,6 +44,7 @@ codegen-units = 1
 debug = false
 strip = true
 panic = "abort"
+split-debuginfo = "off"
 
 [lints.clippy]
 cargo = "deny"
