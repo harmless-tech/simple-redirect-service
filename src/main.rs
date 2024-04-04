@@ -29,6 +29,7 @@ struct Redirects {
 async fn main() -> anyhow::Result<()> {
     println!("Starting...");
 
+    // TODO: Check if all URIs are valid.
     println!("Loading redirects from ./redirects.json...");
     let file = fs::read_to_string("./redirects.json")?;
     let redirects: Redirects = serde_json::from_str(&file)?;
@@ -36,7 +37,8 @@ async fn main() -> anyhow::Result<()> {
 
     let app = Router::new()
         .route("/", get(srs_info))
-        .route("/srs-license", get(srs_license))
+        .route("/srs", get(srs_src))
+        .route("/srs/license", get(srs_license))
         .route("/:path", get(redirect))
         .with_state(Arc::new(redirects));
 
@@ -78,12 +80,16 @@ async fn srs_info() -> Json<Value> {
             "version": env!("CARGO_PKG_VERSION"),
             "desc": "A simple redirect service.",
             "authors": ["harmless-tech"],
-            "license": "/srs-license",
+            "license": "/srs/license",
             "git": "https://github.com/harmless-tech/simple-redirect-service",
             "issues": "https://github.com/harmless-tech/simple-redirect-service/issues"
         }))
     })
     .clone()
+}
+
+async fn srs_src() -> Redirect {
+    Redirect::temporary("https://github.com/harmless-tech/simple-redirect-service")
 }
 
 async fn srs_license() -> &'static str {
