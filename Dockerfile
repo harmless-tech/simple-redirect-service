@@ -1,26 +1,43 @@
-FROM crystallang/crystal:latest-alpine as builder
+# syntax=docker/dockerfile:1.4
+FROM rust:alpine as builder
+ARG TARGETARCH
+ARG BUILD_PROFILE=release
 
-RUN crystal --version
+WORKDIR /app-build
+RUN mkdir -p /app-bin
 
-WORKDIR /app
+RUN --mount=type=cache,id=apk,target=/etc/apk/cache,sharing=shared \
+    apk update && apk add alpine-sdk perl bash
 
-COPY spec/ ./spec
-COPY shard.yml .
-COPY shard.lock .
+RUN --mount=type=cache,target=/prebuilt,sharing=locked <<EOT
+    set -e
+    export PATH=$PATH:/prebuilt/bin
+    if [ ! -f /prebuilt/bin/cargo-prebuilt ]; then
+        curl --proto '=https' --tlsv1.2 -sSf \
+            https://raw.githubusercontent.com/cargo-prebuilt/cargo-prebuilt/main/scripts/install-cargo-prebuilt.sh \
+            | LIBC=musl INSTALL_PATH=/prebuilt/bin FORCE=true bash;
+    fi
+    cargo prebuilt --path=/prebuilt/bin cargo-auditable
+EOT
 
-RUN shards install --production
+COPY Cargo.toml .
+COPY Cargo.lock .
+COPY src src
 
-COPY src/ ./src
-COPY LICENSE .
-
-RUN shards build --production --release --static --verbose
-RUN strip --strip-all ./bin/simple-redirect-service
+RUN --mount=type=cache,target=/app-build/target,sharing=locked --mount=type=cache,id=cargo,target=$CARGO_HOME/registry --mount=type=cache,target=/prebuilt,sharing=locked <<EOT
+    set -e
+    export CFLAGS=-mno-outline-atomics
+    export ARCH="$(uname -m)"
+    if [ $BUILD_PROFILE == 'dev' ]; then BUILD_DIR=debug; else BUILD_DIR=$BUILD_PROFILE; fi
+    export PATH=$PATH:/prebuilt/bin
+    cargo auditable build --profile="$BUILD_PROFILE" --target=$ARCH-unknown-linux-musl
+    mv target/$ARCH-unknown-linux-musl/$BUILD_DIR/simple-redirect-service /app-bin/
+EOT
 
 FROM scratch
 
-WORKDIR /app
+COPY --from=builder /app-bin/simple-redirect-service /app/
+COPY LICENSE /app/
 
-COPY --from=builder /app/bin/simple-redirect-service .
-COPY --from=builder /app/LICENSE .
-
-ENTRYPOINT [ "/app/simple-redirect-service" ]
+EXPOSE 3000
+ENTRYPOINT ["/app/simple-redirect-service"]

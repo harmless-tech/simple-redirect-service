@@ -1,9 +1,9 @@
-/docs/
-/lib/
-/bin/
-/.shards/
-*.dwarf
+.idea
+.fleet
+.vscode
 
+target/
 redirects.json
 
 .DS_Store
+*.tmp

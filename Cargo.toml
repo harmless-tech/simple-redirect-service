@@ -1,0 +1,47 @@
+[package]
+name = "simple-redirect-service"
+version = "0.2.0"
+edition = "2021"
+authors = ["harmless-tech"]
+description = "Redirect"
+readme = "README.md"
+license = "MIT"
+#homepage = ""
+repository = "https://github.com/harmless-tech/simple-redirect-service"
+categories = ["command-line-utilities"]
+keywords = ["binary"]
+#rust-version = "1.70"
+include = [
+  "src/",
+  "Cargo.lock",
+  "Cargo.toml",
+  "LICENSE",
+  "README.md",
+]
+
+[dependencies]
+anyhow = "1.0.81"
+axum = "0.7.5"
+indexmap = { version = "2.2.6", features = ["serde"] }
+mimalloc = "0.1.39"
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = { version = "1.0.115", features = ["indexmap"] }
+tokio = { version = "1.37.0", features = ["macros", "rt-multi-thread", "signal"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+debug = false
+strip = true
+panic = "abort"
+
+[lints.clippy]
+cargo = "deny"
+correctness = "deny"
+complexity = "deny"
+#nursery = "deny"
+pedantic = "deny"
+perf = "deny"
+style = "deny"
+suspicious = "deny"

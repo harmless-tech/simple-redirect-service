@@ -8,33 +8,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Cache crystal
-        uses: actions/cache@v4
-        with:
-          path: |
-            bin
-            lib
-          key: ${{ runner.os }}-crystal-build-${{ hashFiles('**/shard.lock') }}
-      - name: Install pkgs
-        run: sudo apt update && sudo apt-get install -y libbsd-dev libedit-dev libevent-dev 
-          libgmp-dev libgmpxx4ldbl libpcre3-dev libssl-dev libtool libxml2-dev libyaml-dev libz-dev
-      - name: Install crystal
-        run: curl -fsSL https://crystal-lang.org/install.sh | sudo bash
-      - name: Build
-        run: |
-          shards install
-          shards build --verbose
-      - name: Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: srs
-          path: |
-            bin/simple-redirect-service
-
   docker-build:
     runs-on: ubuntu-latest
     steps:
@@ -51,14 +24,19 @@ jobs:
           file: ./Dockerfile
           pull: true
           load: true
+          push: false
           tags: srs-dev
           platforms: linux/amd64
           builder: ${{ steps.buildx.outputs.name }}
+          build-args: |
+            BUILD_PROFILE=dev
       - name: Create json
         run: |
           echo '{"redirects": {"duck": "https://duckduckgo.com"}}' > redirects.json
       - name: Test
+        shell: bash
         run: |
+          set -euxo pipefail
           docker run --platform=linux/amd64 -d --rm -p 3000:3000 --name srs --mount type=bind,source="$(pwd)/redirects.json",target=/app/redirects.json --pull=never srs-dev
           sleep 15
           docker logs srs
