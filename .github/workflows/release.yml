@@ -39,3 +39,10 @@ jobs:
           tags: ghcr.io/harmless-tech/simple-redirect-service:latest,ghcr.io/harmless-tech/simple-redirect-service:${{ github.ref_name }},quay.io/harmless-tech/simple-redirect-service:latest,quay.io/harmless-tech/simple-redirect-service:${{ github.ref_name }}
           platforms: linux/amd64,linux/arm64
           builder: ${{ steps.buildx.outputs.name }}
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          name: simple-redirect-service-${{ github.ref_name }}
+          makeLatest: true
+          allowUpdates: true
