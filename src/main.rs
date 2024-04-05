@@ -55,6 +55,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/", get(srs_info))
         .route("/srs", get(srs_src))
         .route("/srs/license", get(srs_license))
+        .route("/robots.txt", get(srs_robots))
         .route("/:path", get(redirect))
         .fallback(h_404)
         .with_state(Arc::new(redirects));
@@ -120,6 +121,11 @@ async fn srs_src() -> Redirect {
 
 async fn srs_license() -> &'static str {
     static STR: &str = include_str!("../LICENSE");
+    STR
+}
+
+async fn srs_robots() -> &'static str {
+    static STR: &str = include_str!("./robots.txt");
     STR
 }
 
