@@ -7,15 +7,18 @@ WORKDIR /app-build
 RUN mkdir -p /app-bin
 
 RUN --mount=type=cache,id=apk,target=/etc/apk/cache,sharing=shared \
-    apk update && apk add alpine-sdk perl bash
+    apk update && apk add alpine-sdk perl bash curl
 
 RUN --mount=type=cache,target=/prebuilt,sharing=locked <<EOT
     set -e
     export PATH=$PATH:/prebuilt/bin
     if [ ! -f /prebuilt/bin/cargo-prebuilt ]; then
+        mkdir -p /prebuilt/bin
         curl --proto '=https' --tlsv1.2 -sSf \
-            https://raw.githubusercontent.com/cargo-prebuilt/cargo-prebuilt/main/scripts/install-cargo-prebuilt.sh \
-            | LIBC=musl INSTALL_PATH=/prebuilt/bin FORCE=true bash;
+        https://raw.githubusercontent.com/cargo-prebuilt/cargo-prebuilt/main/scripts/install-cargo-prebuilt.sh \
+        -o install-cargo-prebuilt.sh \
+        && LIBC=musl INSTALL_PATH=/prebuilt/bin FORCE=true bash install-cargo-prebuilt.sh \
+        && rm install-cargo-prebuilt.sh
     fi
     cargo prebuilt --path=/prebuilt/bin cargo-auditable
 EOT
