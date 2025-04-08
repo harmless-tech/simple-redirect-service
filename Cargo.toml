@@ -26,7 +26,7 @@ indexmap = { version = "2.3.0", features = ["serde"] }
 mimalloc = { version = "0.1.43", optional = true}
 serde = { version = "1.0.205", features = ["derive"] }
 serde_json = { version = "1.0.122", features = ["indexmap"] }
-tokio = { version = "1.39.2", features = ["macros", "rt-multi-thread", "signal"] }
+tokio = { version = "1.43.1", features = ["macros", "rt-multi-thread", "signal"] }
 tower = "0.4.13"
 tower-http = { version = "0.5.2", features = ["normalize-path", "trace"] }
 tracing = "0.1.40"
