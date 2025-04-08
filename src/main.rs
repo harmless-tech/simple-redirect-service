@@ -56,7 +56,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/srs", get(srs_src))
         .route("/srs/license", get(srs_license))
         .route("/robots.txt", get(srs_robots))
-        .route("/:path", get(redirect))
+        .route("/{path}", get(redirect))
         .fallback(h_404)
         .with_state(Arc::new(redirects));
 

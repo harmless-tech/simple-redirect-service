@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1
 FROM rust:alpine as builder
 ARG TARGETARCH
 ARG BUILD_PROFILE=release
